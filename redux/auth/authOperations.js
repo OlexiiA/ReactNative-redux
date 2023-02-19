@@ -1,5 +1,6 @@
 import db from "../../firebase/config";
 
+
 export const authSingUpUser = ({email, password, name}) => async (dispatch, getState) => {
     try {
         const user = await db.auth().createUserWithEmailAndPassword(email, password);

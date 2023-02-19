@@ -34,7 +34,7 @@ export default function RegistrationScreen({ navigation }) {
     Keyboard.dismiss();
     dispatch(authSingUpUser(state))
     setstate(initialState);
-    console.log(state);
+    // console.log(state);
   };
 
   return (
