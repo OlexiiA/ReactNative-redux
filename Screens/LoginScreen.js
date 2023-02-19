@@ -12,6 +12,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { authSingInUser } from "../redux/auth/authOperations";
 
 const initialState = {
   email: "",
@@ -22,12 +24,15 @@ export default function LoginScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
 
+  const dispatch = useDispatch();
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
   };
   const resetForm = () => {
     setstate(initialState);
     Keyboard.dismiss();
+    dispatch(authSingInUser(state))
     console.log(state);
   };
 
