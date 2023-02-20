@@ -8,6 +8,8 @@ import {
   Image,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { authSignOutUser } from "../../redux/auth/authOperations";
 
 const HorizontalLine = ({}) => {
   return <View style={styles.line}></View>;
@@ -15,7 +17,9 @@ const HorizontalLine = ({}) => {
 
 export default function PostsScreen({ navigation, route }) {
   const [posts, setPosts] = useState([]);
-  console.log("route-params", route.params);
+
+  const dispatch = useDispatch();
+  // console.log("route-params", route.params);
 
   useEffect(() => {
     if (route.params) {
@@ -24,8 +28,10 @@ export default function PostsScreen({ navigation, route }) {
   }, [route.params]);
   console.log("posts:", posts);
 
-  const handlePress = () => {
-    navigation.navigate("Login");
+  const signOut = () => {
+    // navigation.navigate("Login");
+    dispatch(authSignOutUser())
+    
   };
 
   return (
@@ -34,7 +40,7 @@ export default function PostsScreen({ navigation, route }) {
         <View style={styles.content}>
           <Text style={{ fontSize: 17, fontWeight: "500" }}>Публикации</Text>
           <TouchableOpacity
-            onPress={handlePress}
+            onPress={signOut}
             style={{ marginLeft: 101, marginRight: 15 }}
           >
             <Feather name="log-in" size={24} color="#BDBDBD" />

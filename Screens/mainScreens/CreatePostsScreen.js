@@ -2,44 +2,47 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
+
+import firebase from "firebase/app";
+import "firebase/storage";
+import { db } from "../../firebase/config";
 
 const HorizontalLine = () => {
   return <View style={styles.line}></View>;
 };
 
-export default function CreatePostsScreen({navigation}) {
+export default function CreatePostsScreen({ navigation }) {
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState("");
 
   const takePhoto = async () => {
-    // const photo = await camera.takePictureAsync();
-    // setPhoto(photo.uri);
-    // let location = await Location.getCurrentPositionAsync();
-    // console.log("location:", location);
-    // console.log(photo);
-    // if (camera) {
-    //   const photo = await camera.takePictureAsync();
-    //   setPhoto(photo.uri);
-    //   console.log(photo);
-    // }
     const photo = await camera.takePictureAsync();
     setPhoto(photo.uri);
-  
+
     const { status } = await Location.requestForegroundPermissionsAsync();
-  
-    if (status === 'granted') {
+
+    if (status === "granted") {
       const location = await Location.getCurrentPositionAsync();
       console.log("location:", location);
     } else {
-      // Handle permission not granted error
     }
-    
     console.log(photo);
   };
+  // =====================Storage firebase===================
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+    const uniquePostId = Date.now().toString();
+
+    const data = await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+    console.log(data)
+  };
+
   const sendPhoto = () => {
-    navigation.navigate("Posts", {photo} )
-  }
+    uploadPhotoToServer()
+    navigation.navigate("Posts", { photo });
+  };
 
   return (
     <View>
